@@ -86,6 +86,7 @@ def callback_worker(call):
         age = str(user_age[user_id])
         bot.send_message(partner_user_id, 'Имя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
 
+
 def set_age(message, user_id):
     user_age[user_id] = int(message.text)
     sent = bot.send_message(user_id, 'Введи свой уникальный ник, по которому пользователи смогут тебя найти')
