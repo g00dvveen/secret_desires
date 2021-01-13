@@ -6,9 +6,15 @@ from telebot import types
 bot = telebot.TeleBot(config.token)
 user_names = {'185542622': 'Serg'}
 user_sex = {'185542622': 'male'}
-user_age = {'185542622': 35}
+user_age = {'185542622': '37'}
 user_nicknames = {'g00dvveen': '185542622'}
 user_partners = {'185542622': 'g00dvveen'}
+
+# user_names = {}
+# user_sex = {}
+# user_age = {}
+# user_nicknames = {}
+# user_partners = {}
 
 
 @bot.message_handler(commands=['start'])
@@ -16,10 +22,16 @@ def start_message(message):
     user_id = str(message.from_user.id)
     if user_id in user_names:
         bot.send_message(user_id, 'Привет, '+user_names[user_id])
-        input_partner(user_id)
+        show_main_menu(user_id)
     else:
         sent = bot.send_message(user_id, 'Давай знакомиться! Как тебя зовут?')
         bot.register_next_step_handler(sent, lambda m: acquaint(m, user_id))
+
+
+@bot.message_handler(commands=['help'])
+def start_message(message):
+    user_id = str(message.from_user.id)
+    show_help(user_id)
 
 
 def acquaint(message, user_id):
@@ -35,10 +47,6 @@ def acquaint(message, user_id):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
     user_id = str(call.from_user.id)
-    key_list = list(user_nicknames.keys())
-    val_list = list(user_nicknames.values())
-    position = (val_list.index(user_id))
-    user_nickname = key_list[position]
     if call.data == "set_sex_male":
         user_sex[user_id] = 'male'
         sent = bot.send_message(user_id, 'Отлично! Сколько тебе лет?')
@@ -48,6 +56,10 @@ def callback_worker(call):
         sent = bot.send_message(user_id, 'Отлично! Сколько тебе лет?')
         bot.register_next_step_handler(sent, lambda m: set_age(m, user_id))
     elif call.data == "dinner":
+        key_list = list(user_nicknames.keys())
+        val_list = list(user_nicknames.values())
+        position = (val_list.index(user_id))
+        user_nickname = key_list[position]
         partner_nickname = user_partners[user_id]
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает с тобой поужинать!')
@@ -55,7 +67,13 @@ def callback_worker(call):
         key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+partner_user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
+        bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
+        show_main_menu(user_id)
     elif call.data == "cinema":
+        key_list = list(user_nicknames.keys())
+        val_list = list(user_nicknames.values())
+        position = (val_list.index(user_id))
+        user_nickname = key_list[position]
         partner_nickname = user_partners[user_id]
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает сходить с тобой! в кино')
@@ -63,7 +81,13 @@ def callback_worker(call):
         key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,' + partner_user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
+        bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
+        show_main_menu(user_id)
     elif call.data == "massage":
+        key_list = list(user_nicknames.keys())
+        val_list = list(user_nicknames.values())
+        position = (val_list.index(user_id))
+        user_nickname = key_list[position]
         partner_nickname = user_partners[user_id]
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает получить от тебя массаж!')
@@ -71,7 +95,13 @@ def callback_worker(call):
         key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,' + partner_user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
+        bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
+        show_main_menu(user_id)
     elif call.data == "sex":
+        key_list = list(user_nicknames.keys())
+        val_list = list(user_nicknames.values())
+        position = (val_list.index(user_id))
+        user_nickname = key_list[position]
         partner_nickname = user_partners[user_id]
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает секса с тобой!')
@@ -79,6 +109,8 @@ def callback_worker(call):
         key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,' + partner_user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
+        bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
+        show_main_menu(user_id)
     elif 'get_user_info' in call.data:
         partner_user_id = call.data.split(',')[1]
         name = user_names[user_id]
@@ -101,7 +133,7 @@ def set_nickname(message, user_id):
     else:
         user_nicknames[nickname] = user_id
     bot.send_message(user_id, 'Великолепно! Продолжим?')
-    input_partner(user_id)
+    show_main_menu(user_id)
 
 
 def input_partner(user_id):
@@ -115,7 +147,9 @@ def input_partner(user_id):
 
 def set_partner(message, user_id):
     partner_nickname = message.text.lower()
-    if partner_nickname in user_nicknames:
+    if partner_nickname == 'exit':
+        show_main_menu(user_id)
+    elif partner_nickname in user_nicknames:
         partner_user_id = user_nicknames[partner_nickname]
         user_partners[user_id] = partner_nickname
         bot.send_message(user_id, 'Отлично! Идем дальше...')
@@ -127,10 +161,14 @@ def set_partner(message, user_id):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    if message.text == "Привет":
-        bot.send_message(message.from_user.id, "Привет, сейчас я расскажу тебе гороскоп на сегодня.")
-    elif message.text == "/help":
-        bot.send_message(message.from_user.id, "Напиши Привет")
+    if message.text == "Пользователи":
+        show_users(str(message.from_user.id))
+    elif message.text == "Перейти к желаниям":
+        input_partner(str(message.from_user.id))
+    elif message.text == "Перейти к желаниям":
+        input_partner(str(message.from_user.id))
+    elif message.text == "Помощь":
+        show_help(str(message.from_user.id))
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
 
@@ -154,5 +192,34 @@ def generate_desires_markup():
     for item in list_items:
         markup.add(item)
     return markup
+
+
+def show_main_menu(user_id):
+    markup = generate_main_menu_markup()
+    bot.send_message(user_id, text='Что дальше?', reply_markup=markup)
+
+
+def show_users(user_id):
+    for user in user_nicknames:
+        id = user_nicknames[user]
+        name = user_names[id]
+        sex = 'Мужской' if user_sex[id] == 'male' else 'Женский'
+        age = str(user_age[id])
+        bot.send_message(user_id, text='Ник: ' + user + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+    show_main_menu(user_id)
+
+
+def generate_main_menu_markup():
+    list_items = ['Пользователи', 'Перейти к желаниям', 'Профиль', 'Помощь', ]
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+    for item in list_items:
+        markup.add(item)
+    return markup
+
+
+def show_help(user_id):
+    bot.send_message(user_id, 'Страничка помощи в использовании бота Secret Desires.\n Команды:'
+                              '\n/start - начать общение с ботом'
+                              '\nexit - выйти из текущего модуля в главное меню')
 
 bot.polling(none_stop=True, interval=0)
