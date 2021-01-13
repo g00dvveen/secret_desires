@@ -4,11 +4,21 @@ from telebot import types
 
 
 bot = telebot.TeleBot(config.token)
-user_names = {'185542622': 'Serg'}
-user_sex = {'185542622': 'male'}
-user_age = {'185542622': '37'}
-user_nicknames = {'g00dvveen': '185542622'}
-user_partners = {'185542622': 'g00dvveen'}
+user_names = {
+    '185542622': 'Serg'
+}
+user_sex = {
+    '185542622': 'male'
+}
+user_age = {
+    '185542622': '37'
+}
+user_nicknames = {
+    'g00dvveen': '185542622'
+}
+user_partners = {
+    '185542622': 'g00dvveen'
+}
 
 # user_names = {}
 # user_sex = {}
