@@ -192,6 +192,8 @@ def get_text_messages(message):
         input_partner(str(message.from_user.id))
     elif message.text == "Помощь":
         show_help(str(message.from_user.id))
+    elif message.text == "Профиль":
+        show_profile(str(message.from_user.id))
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
 
@@ -248,5 +250,21 @@ def show_help(user_id):
     bot.send_message(user_id, 'Страничка помощи в использовании бота Secret Desires.\n Команды:'
                               '\n/start - начать общение с ботом'
                               '\nexit - выйти из текущего модуля в главное меню')
+
+
+def show_profile(user_id):
+    key_list = list(user_nicknames.keys())
+    val_list = list(user_nicknames.values())
+    position = (val_list.index(user_id))
+    user_nickname = key_list[position]
+    name = user_names[user_id]
+    sex = 'Мужской' if user_sex[user_id] == 'male' else 'Женский'
+    age = str(user_age[user_id])
+    bot.send_message(user_id, text='Ник: ' + user_nickname + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+    # share_desire_keyboard = types.InlineKeyboardMarkup()
+    # key_share_desire = types.InlineKeyboardButton(text='Поделиться желанием', callback_data='share_desire,' + id)
+    # share_desire_keyboard.add(key_share_desire)
+    # bot.send_message(user_id, 'Ник: ' + user + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age, reply_markup=share_desire_keyboard)
+    # show_main_menu(user_id)
 
 bot.polling(none_stop=True, interval=0)
