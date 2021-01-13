@@ -4,27 +4,27 @@ from telebot import types
 
 
 bot = telebot.TeleBot(config.token)
-user_names = {
-    '185542622': 'Serg'
-}
-user_sex = {
-    '185542622': 'male'
-}
-user_age = {
-    '185542622': '37'
-}
-user_nicknames = {
-    'g00dvveen': '185542622'
-}
-user_partners = {
-    '185542622': 'g00dvveen'
-}
+# user_names = {
+#     '185542622': 'Serg'
+# }
+# user_sex = {
+#     '185542622': 'male'
+# }
+# user_age = {
+#     '185542622': '37'
+# }
+# user_nicknames = {
+#     'g00dvveen': '185542622'
+# }
+# user_partners = {
+#     '185542622': 'g00dvveen'
+# }
 
-# user_names = {}
-# user_sex = {}
-# user_age = {}
-# user_nicknames = {}
-# user_partners = {}
+user_names = {}
+user_sex = {}
+user_age = {}
+user_nicknames = {}
+user_partners = {}
 
 
 @bot.message_handler(commands=['start'])
@@ -127,6 +127,16 @@ def callback_worker(call):
         sex = 'Мужской' if user_sex[user_id] == 'male' else 'Женский'
         age = str(user_age[user_id])
         bot.send_message(partner_user_id, 'Имя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+    elif 'share_desire' in call.data:
+        partner_user_id = call.data.split(',')[1]
+        key_list = list(user_nicknames.keys())
+        val_list = list(user_nicknames.values())
+        position = (val_list.index(partner_user_id))
+        partner_nickname = key_list[position]
+        user_partners[user_id] = partner_nickname
+        bot.send_message(user_id, 'Отлично! Идем дальше...')
+        show_desires(user_id)
+
 
 
 def set_age(message, user_id):
@@ -215,7 +225,11 @@ def show_users(user_id):
         name = user_names[id]
         sex = 'Мужской' if user_sex[id] == 'male' else 'Женский'
         age = str(user_age[id])
-        bot.send_message(user_id, text='Ник: ' + user + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+        # bot.send_message(user_id, text='Ник: ' + user + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+        share_desire_keyboard = types.InlineKeyboardMarkup()
+        key_share_desire = types.InlineKeyboardButton(text='Поделиться желанием', callback_data='share_desire,' + id)
+        share_desire_keyboard.add(key_share_desire)
+        bot.send_message(user_id, 'Ник: ' + user + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age, reply_markup=share_desire_keyboard)
     show_main_menu(user_id)
 
 
