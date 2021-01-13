@@ -64,7 +64,7 @@ def callback_worker(call):
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает с тобой поужинать!')
         get_info_keyboard = types.InlineKeyboardMarkup()
-        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+partner_user_id)
+        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
         bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
@@ -78,7 +78,7 @@ def callback_worker(call):
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает сходить с тобой! в кино')
         get_info_keyboard = types.InlineKeyboardMarkup()
-        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,' + partner_user_id)
+        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
         bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
@@ -92,7 +92,7 @@ def callback_worker(call):
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает получить от тебя массаж!')
         get_info_keyboard = types.InlineKeyboardMarkup()
-        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,' + partner_user_id)
+        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
         bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
@@ -106,7 +106,7 @@ def callback_worker(call):
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает секса с тобой!')
         get_info_keyboard = types.InlineKeyboardMarkup()
-        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,' + partner_user_id)
+        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+user_id)
         get_info_keyboard.add(key_get_info)
         bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
         bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
