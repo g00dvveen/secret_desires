@@ -4,27 +4,30 @@ from telebot import types
 
 
 bot = telebot.TeleBot(config.token)
-# user_names = {
-#     '185542622': 'Serg'
-# }
-# user_sex = {
-#     '185542622': 'male'
-# }
-# user_age = {
-#     '185542622': '37'
-# }
-# user_nicknames = {
-#     'g00dvveen': '185542622'
-# }
-# user_partners = {
-#     '185542622': 'g00dvveen'
-# }
+user_names = {
+    '185542622': 'Катя',
+    '858029609': 'Вася'
+}
+user_sex = {
+    '185542622': 'female',
+    '858029609': 'male'
+}
+user_age = {
+    '185542622': '25',
+    '858029609': '32'
+}
+user_nicknames = {
+    'olga25': '185542622',
+    'vaso': '858029609'
+}
+user_partners = {
+}
 
-user_names = {}
-user_sex = {}
-user_age = {}
-user_nicknames = {}
-user_partners = {}
+# user_names = {}
+# user_sex = {}
+# user_age = {}
+# user_nicknames = {}
+# user_partners = {}
 
 
 @bot.message_handler(commands=['start'])
@@ -123,10 +126,10 @@ def callback_worker(call):
         show_main_menu(user_id)
     elif 'get_user_info' in call.data:
         partner_user_id = call.data.split(',')[1]
-        name = user_names[user_id]
-        sex = 'Мужской' if user_sex[user_id] == 'male' else 'Женский'
-        age = str(user_age[user_id])
-        bot.send_message(partner_user_id, 'Имя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+        name = user_names[partner_user_id]
+        sex = 'Мужской' if user_sex[partner_user_id] == 'male' else 'Женский'
+        age = str(user_age[partner_user_id])
+        bot.send_message(user_id, 'Имя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
     elif 'share_desire' in call.data:
         partner_user_id = call.data.split(',')[1]
         key_list = list(user_nicknames.keys())
