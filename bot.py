@@ -17,8 +17,8 @@ user_age = {
     '858029609': '35'
 }
 user_nicknames = {
-    'serg': '185542622',
-    'dim': '858029609'
+    'foma': '185542622',
+    'ven': '858029609'
 }
 user_partners = {
 }
