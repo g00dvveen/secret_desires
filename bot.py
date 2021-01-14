@@ -5,20 +5,20 @@ from telebot import types
 
 bot = telebot.TeleBot(config.token)
 user_names = {
-    '185542622': 'Катя',
-    '858029609': 'Вася'
+    '185542622': 'Фома',
+    '858029609': 'Веня'
 }
 user_sex = {
-    '185542622': 'female',
+    '185542622': 'male',
     '858029609': 'male'
 }
 user_age = {
-    '185542622': '25',
-    '858029609': '32'
+    '185542622': '37',
+    '858029609': '35'
 }
 user_nicknames = {
-    'olga25': '185542622',
-    'vaso': '858029609'
+    'serg': '185542622',
+    'dim': '858029609'
 }
 user_partners = {
 }
@@ -139,7 +139,9 @@ def callback_worker(call):
         user_partners[user_id] = partner_nickname
         bot.send_message(user_id, 'Отлично! Идем дальше...')
         show_desires(user_id)
-
+    elif call.data == 'change_nickname':
+        sent = bot.send_message(user_id, 'Укажи совй новый ник')
+        bot.register_next_step_handler(sent, lambda m: set_nickname(m, user_id))
 
 
 def set_age(message, user_id):
@@ -257,14 +259,25 @@ def show_profile(user_id):
     val_list = list(user_nicknames.values())
     position = (val_list.index(user_id))
     user_nickname = key_list[position]
+    change_nickname_keyboard = types.InlineKeyboardMarkup()
+    key_change_nickname = types.InlineKeyboardButton(text='Изменить', callback_data='change_nickname')
+    change_nickname_keyboard.add(key_change_nickname)
+    bot.send_message(user_id, text='Ник: ' + user_nickname, reply_markup=change_nickname_keyboard)
     name = user_names[user_id]
+    change_name_keyboard = types.InlineKeyboardMarkup()
+    key_change_name = types.InlineKeyboardButton(text='Изменить', callback_data='change_name')
+    change_name_keyboard.add(key_change_name)
+    bot.send_message(user_id, text='Имя: ' + name, reply_markup=change_name_keyboard)
     sex = 'Мужской' if user_sex[user_id] == 'male' else 'Женский'
+    change_sex_keyboard = types.InlineKeyboardMarkup()
+    key_change_sex = types.InlineKeyboardButton(text='Изменить', callback_data='change_sex')
+    change_sex_keyboard.add(key_change_sex)
+    bot.send_message(user_id, text='Пол: ' + sex, reply_markup=change_sex_keyboard)
     age = str(user_age[user_id])
-    bot.send_message(user_id, text='Ник: ' + user_nickname + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
-    # share_desire_keyboard = types.InlineKeyboardMarkup()
-    # key_share_desire = types.InlineKeyboardButton(text='Поделиться желанием', callback_data='share_desire,' + id)
-    # share_desire_keyboard.add(key_share_desire)
-    # bot.send_message(user_id, 'Ник: ' + user + '\nИмя: ' + name + '\nПол: '+sex+'\nВозраст: '+age, reply_markup=share_desire_keyboard)
-    # show_main_menu(user_id)
+    change_age_keyboard = types.InlineKeyboardMarkup()
+    key_change_age = types.InlineKeyboardButton(text='Изменить', callback_data='change_age')
+    change_age_keyboard.add(key_change_age)
+    bot.send_message(user_id, text='Возраст: ' + age, reply_markup=change_age_keyboard)
+
 
 bot.polling(none_stop=True, interval=0)
