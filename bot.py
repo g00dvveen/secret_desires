@@ -140,8 +140,29 @@ def callback_worker(call):
         bot.send_message(user_id, 'Отлично! Идем дальше...')
         show_desires(user_id)
     elif call.data == 'change_nickname':
-        sent = bot.send_message(user_id, 'Укажи совй новый ник')
-        bot.register_next_step_handler(sent, lambda m: set_nickname(m, user_id))
+        sent = bot.send_message(user_id, 'Укажи свой ник')
+        bot.register_next_step_handler(sent, lambda m: edit_nickname(m, user_id))
+    elif call.data == 'change_name':
+        sent = bot.send_message(user_id, 'Укажи свое имя')
+        bot.register_next_step_handler(sent, lambda m: edit_name(m, user_id))
+    elif call.data == 'change_age':
+        sent = bot.send_message(user_id, 'Укажи свой возраст')
+        bot.register_next_step_handler(sent, lambda m: edit_age(m, user_id))
+    elif call.data == 'change_sex':
+        sex_keyboard = types.InlineKeyboardMarkup()
+        key_male = types.InlineKeyboardButton(text='Мужской', callback_data='edit_sex_male')
+        sex_keyboard.add(key_male)
+        key_female = types.InlineKeyboardButton(text='Женский', callback_data='edit_sex_female')
+        sex_keyboard.add(key_female)
+        bot.send_message(user_id, text='Укажи свой пол', reply_markup=sex_keyboard)
+    elif call.data == "edit_sex_male":
+        user_sex[user_id] = 'male'
+        bot.send_message(user_id, 'Пол обновлен')
+        show_main_menu(user_id)
+    elif call.data == "edit_sex_female":
+        user_sex[user_id] = 'female'
+        bot.send_message(user_id, 'Пол обновлен')
+        show_main_menu(user_id)
 
 
 def set_age(message, user_id):
@@ -152,12 +173,42 @@ def set_age(message, user_id):
 
 def set_nickname(message, user_id):
     nickname = message.text.lower()
-    if user_id in user_nicknames:
+    if nickname in user_nicknames:
         sent = bot.send_message(user_id, 'Прости, но это имя уже занято. попробуй другое')
         bot.register_next_step_handler(sent, lambda m: set_nickname(m, user_id))
     else:
         user_nicknames[nickname] = user_id
     bot.send_message(user_id, 'Великолепно! Продолжим?')
+    show_main_menu(user_id)
+
+
+def edit_nickname(message, user_id):
+    nickname = message.text.lower()
+    if nickname in user_nicknames:
+        sent = bot.send_message(user_id, 'Прости, но это имя уже занято. попробуй другое')
+        bot.register_next_step_handler(sent, lambda m: edit_nickname(m, user_id))
+    else:
+        key_list = list(user_nicknames.keys())
+        val_list = list(user_nicknames.values())
+        position = (val_list.index(user_id))
+        user_nickname = key_list[position]
+        user_nicknames.pop(user_nickname)
+        user_nicknames[nickname] = user_id
+    bot.send_message(user_id, 'Твой ник изменен')
+    show_main_menu(user_id)
+
+
+def edit_name(message, user_id):
+    name = message.text
+    user_names[user_id] = name
+    bot.send_message(user_id, 'Твое имя обновлено')
+    show_main_menu(user_id)
+
+
+def edit_age(message, user_id):
+    age = message.text
+    user_age[user_id] = age
+    bot.send_message(user_id, 'Твой возраст обновлен')
     show_main_menu(user_id)
 
 
