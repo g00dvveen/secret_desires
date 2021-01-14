@@ -145,7 +145,7 @@ def callback_worker(call):
 
 
 def set_age(message, user_id):
-    user_age[user_id] = int(message.text)
+    user_age[user_id] = message.text
     sent = bot.send_message(user_id, 'Введи свой уникальный ник, по которому пользователи смогут тебя найти')
     bot.register_next_step_handler(sent, lambda m: set_nickname(m, user_id))
 
