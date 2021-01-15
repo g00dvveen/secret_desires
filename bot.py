@@ -105,9 +105,11 @@ def callback_worker(call):
         partner_user_id = user_nicknames[partner_nickname]
         bot.send_message(partner_user_id, 'Пользователь с ником '+user_nickname+' желает получить от тебя массаж!')
         get_info_keyboard = types.InlineKeyboardMarkup()
-        key_get_info = types.InlineKeyboardButton(text='Показать', callback_data='get_user_info,'+user_id)
+        key_get_info = types.InlineKeyboardButton(text='Показать профиль', callback_data='get_user_info,'+user_id)
+        key_send_message = types.InlineKeyboardButton(text='Отправить сообщение', callback_data='send_message,' + user_id)
         get_info_keyboard.add(key_get_info)
-        bot.send_message(partner_user_id, 'Показать профиль', reply_markup=get_info_keyboard)
+        get_info_keyboard.add(key_send_message)
+        bot.send_message(partner_user_id, 'Интересно?', reply_markup=get_info_keyboard)
         bot.send_message(user_id, 'Пользователь с ником ' + partner_nickname + ' теперь знает о твоем желании.')
         show_main_menu(user_id)
     elif call.data == "sex":
@@ -130,6 +132,10 @@ def callback_worker(call):
         sex = 'Мужской' if user_sex[partner_user_id] == 'male' else 'Женский'
         age = str(user_age[partner_user_id])
         bot.send_message(user_id, 'Имя: ' + name + '\nПол: '+sex+'\nВозраст: '+age)
+    elif 'send_message' in call.data:
+        partner_user_id = call.data.split(',')[1]
+        sent = bot.send_message(user_id, 'Введи текст сообщения')
+        bot.register_next_step_handler(sent, lambda m: send_message(m, user_id, partner_user_id))
     elif 'share_desire' in call.data:
         partner_user_id = call.data.split(',')[1]
         key_list = list(user_nicknames.keys())
@@ -329,6 +335,16 @@ def show_profile(user_id):
     key_change_age = types.InlineKeyboardButton(text='Изменить', callback_data='change_age')
     change_age_keyboard.add(key_change_age)
     bot.send_message(user_id, text='Возраст: ' + age, reply_markup=change_age_keyboard)
+
+
+def send_message(message, user_id, partner_user_id):
+    sender_name = user_names[user_id]
+    m = message.text
+    text = 'Сообщение от '+sender_name+'\n\n'+m
+    reply_keyboard = types.InlineKeyboardMarkup()
+    key_reply = types.InlineKeyboardButton(text='Ответить', callback_data='send_message,' + user_id)
+    reply_keyboard.add(key_reply)
+    bot.send_message(partner_user_id, text, reply_markup=reply_keyboard)
 
 
 bot.polling(none_stop=True, interval=0)
